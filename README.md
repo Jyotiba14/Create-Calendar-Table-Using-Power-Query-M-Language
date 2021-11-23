@@ -1,2 +1,10 @@
-# Create-Calendar-Table-Using-Power-Query-M-Language
-There have been many techniques for creating a Calendar Date table in Power BI using mostly DAX. However, there might be reasons one might want to do the same using Power Query M language which might be for Model Performance reasons or convenience reasons. This post will demonstrate ways I have achieved this using a Custom Column and the M language in Power Query. There are other approaches to doing this as seen in this awesome YouTube video from Enterprise DNA. For those who want to understand the steps on how they can achieve this in a simplified approach that does not require the need to create a lot of query functions that might impact model performance, then continue reading this article.
+# Creating a Calendar Table Using the Power Query M-Language
+# INTRODUCTION
+Calendar Date table can be created in Power BI using mostly DAX. However, there might be reasons one might want to do the same using Power Query M language which might be for Model Performance reasons or convenience reasons. In this i have created the calendar date table using a Insert Column and the M language in Power Query. 
+# STEPS FOR CREATING THE CALENDAR TABLE 
+1. Create a new table named "**start date**" from the home tab using the enter data table. 
+2. change the column name and the table name to " **start date**" and enter the start date you wish to enter and load the data ( i have selected 24/04/2002).
+3. select the start date query and from the add column ribbon choose custom column option and create a column named "**End date**", then in the custom column formula type - **Date.From(DateTime.LocalNow())** and enter ok . 
+4. Change the datatype of both the columns to date type.
+5. Again from the add column ribbon choose custom column name as **"Dates"** and enter the formula as **{Number.From([#"start date "])..Number.From([#"End date "])}** click ok , expand the Dates column to new rows , change the datatype . Delete the **start date**" and "**End date** columns . 
+6. Load Calendar dates table to Power BI data model.
