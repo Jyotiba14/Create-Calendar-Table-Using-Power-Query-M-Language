@@ -1,0 +1,23 @@
+let fnDateTable = (StartDate as date, EndDate as date) as table =>
+let
+    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMjLXNzDUNzIwMFSKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Start date " = _t]),
+    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Start date ", type date}}),
+    #"Added Custom" = Table.AddColumn(#"Changed Type", "End date ", each Date.From(DateTime.LocalNow())),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Added Custom",{{"End date ", type date}}),
+    #"Added Custom1" = Table.AddColumn(#"Changed Type1", "Dates ", each {Number.From([#"Start date "])..Number.From([#"End date "])}),
+    #"Expanded Dates " = Table.ExpandListColumn(#"Added Custom1", "Dates "),
+    #"Changed Type2" = Table.TransformColumnTypes(#"Expanded Dates ",{{"Dates ", type date}}),
+    #"Removed Columns" = Table.RemoveColumns(#"Changed Type2",{"Start date ", "End date "}),
+    #"Inserted Year" = Table.AddColumn(#"Removed Columns", "Year", each Date.Year([#"Dates "]), Int64.Type),
+    #"Inserted Month Name" = Table.AddColumn(#"Inserted Year", "Month Name", each Date.MonthName([#"Dates "]), type text),
+    #"Inserted Month" = Table.AddColumn(#"Inserted Month Name", "Month", each Date.Month([#"Dates "]), Int64.Type),
+    #"Inserted Quarter" = Table.AddColumn(#"Inserted Month", "Quarter", each Date.QuarterOfYear([#"Dates "]), Int64.Type),
+    #"Inserted Week of Year" = Table.AddColumn(#"Inserted Quarter", "Week of Year", each Date.WeekOfYear([#"Dates "]), Int64.Type),
+    #"Inserted Week of Month" = Table.AddColumn(#"Inserted Week of Year", "Week of Month", each Date.WeekOfMonth([#"Dates "]), Int64.Type),
+    #"Inserted Day Name" = Table.AddColumn(#"Inserted Week of Month", "Day Name", each Date.DayOfWeekName([#"Dates "]), type text),
+    #"Inserted Day" = Table.AddColumn(#"Inserted Day Name", "Day", each Date.Day([#"Dates "]), Int64.Type),
+    #"Inserted Day of Year" = Table.AddColumn(#"Inserted Day", "Day of Year", each Date.DayOfYear([#"Dates "]), Int64.Type)
+in
+    #"Inserted Day of Year"
+    in
+    fnDateTable
